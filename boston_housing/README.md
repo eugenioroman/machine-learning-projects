@@ -2,4 +2,4 @@
 
 The solution to this problem is provided in the `boston_housing.ipynb` notebook file.
 
-An export of the solution is also available in the `boston_housing.html` file.
+An export of the solution is also available in the `report.html` file.
