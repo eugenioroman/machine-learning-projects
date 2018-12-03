@@ -13142,7 +13142,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import libraries necessary for this project</span>
@@ -13215,23 +13215,23 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Minimum price of the data</span>
-<span class="n">minimum_price</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
+<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Maximum price of the data</span>
-<span class="n">maximum_price</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
+<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Mean price of the data</span>
-<span class="n">mean_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">mean_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Median price of the data</span>
-<span class="n">median_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">median_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Standard deviation of prices of the data</span>
-<span class="n">std_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">std_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># Show the calculated statistics</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Statistics for Boston housing dataset:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -13258,11 +13258,11 @@ div#notebook {
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Statistics for Boston housing dataset:
 
-Minimum price: $105000.0
+Minimum price: $454342.9447852761
 Maximum price: $1024800.0
 Mean price: $454342.9447852761
 Median price $438900.0
-Standard deviation of prices: $165340.27765266786
+Standard deviation of prices: $165171.13154429477
 </pre>
 </div>
 </div>
@@ -13729,7 +13729,16 @@ Think about the pros and cons of adding more training points based on if the tra
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>The grid search technique is a technique that finds the best model for a classifier trying a grid of all the possible combinations of values for different hyperparameters. The resulting suggested values for the hyperparameters can be used then to optimise a learning algorithm as part of a cross validation technique (e.g. k-fold cv) to find the highest accuracy for the model.</p>
+<p>The grid search technique is a technique that finds the best model for a classifier trying a grid of all the possible combinations of values for different hyperparameters. The resulting suggested values for the hyperparameters can be used then to optimise a learning algorithm as part of a cross validation technique (e.g. k-fold cv) to find the highest accuracy for the model. It's important to remark that, although parameters are estimated from data automatically by the model, we have to manually set the hyperparameters to help the model estimate parameters.</p>
+<p>A grid search algorithm must be guided by some performance metric, that varies depending on the model. For this one, we've chosen the coefficient of determination, R2, to describe calculate how well our model makes its predictions (comparing y_true and y_predict), but there are other options.</p>
+<p>To perform a grid search properly, it's important to provide it with the correct parameters:</p>
+<ul>
+<li>estimator (the <code>regressor</code>, in this case a decission tree regressor)</li>
+<li>param_grid (the list or dictionary of <code>parameters</code> to be tuned, in this case the <code>max_depth</code>)</li>
+<li>scoring (the scoring function <code>scoring_fnc</code>, made from a <code>performance_metric</code> or loss function using 'make_scorer')</li>
+<li>cv (the cross-validation sets from the training data, <code>cv_sets</code>, in this case using ShuffleSplit to create a set of shuffled sets that uses a 20% of the data as a test set)</li>
+</ul>
+<p>When performing a grid search on the classifier, we have a set of models that differ from each other in the values of their parameters, which fall into a "visual" grid, hence its name. This grid can be understood as a dictionary of parameters, which are combined and tested against each other until all the possible combinations are tried and the best one is found.  As an example, if our parameters are <code>parameters = {'gamma': [0.001, 0.0001],'C': [1, 10, 100, 1000]}</code>, all possible combinations are tried (for each value of 'gamma', the for values of 'C' are tried, so 8 combinations in total), finding out which combination performs the best (for example, it could be <code>{'C': 10, 'gamma': 0.001}</code>).</p>
 
 </div>
 </div>
@@ -13986,11 +13995,11 @@ Predicted selling price for Client 3&#39;s home: $931,636.36
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
 <ul>
-<li><p>Predicted selling price for Client 1's home: $403,025.00</p>
+<li><p>Predicted selling price for Client 1's home: $403,025.00. This is the one with the price in between of the 3, which makes sense: it has the a number of rooms in between the other 2 homes, it's in a neighbourhood that is in between the richness of the other 2 neighbourhoods and the classrooms in the neighbourhood are more crowded than in the most expensive one and less crowded than in the cheapest one.</p>
 </li>
-<li><p>Predicted selling price for Client 2's home: $237,478.72</p>
+<li><p>Predicted selling price for Client 2's home: $237,478.72. This is the cheapest one, which makes sense: it has the smaller amount of rooms, it's in the poorest neighbourhood and the classrooms in the neighbourhood are very crowded.</p>
 </li>
-<li><p>Predicted selling price for Client 3's home: $931,636.36</p>
+<li><p>Predicted selling price for Client 3's home: $931,636.36. This is the most expensive one, which makes sense as well: it has the biggest amount of rooms, it's in the richer neighbourhood and the classrooms in the neighbourhood are very less crowded.</p>
 </li>
 </ul>
 
@@ -14075,7 +14084,7 @@ Range in prices: $73,357.39
 </li>
 <li><p>The features present in the data are definitely not sufficient. There could be other features apart from the ones described in the question, as traffic jams, pollution score, crime index, cost of groceries, connection with publich transportation, number of stores/malls closeby...</p>
 </li>
-<li><p>The model is robust enough to make consistent predictions with high accuracy.</p>
+<li><p>The model is not robust enough to make consistent predictions with high accuracy. The range of prices, as calculated above ($73,357.39), is around 8% of the range of the target variable(MEDV), which seems to be a big difference in price, and thus, the consistency is not as good as it could be desired.</p>
 </li>
 <li><p>To be applicable in a rural city with equivalent results, this model should include other features that reflect the specific context of a rural environment (different salaries, different demand and supply, etc.)</p>
 </li>
